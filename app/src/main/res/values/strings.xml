@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PicChan</string>
+    <string name="image_source">Image source</string>
+    <string name="rotate">Rotate</string>
+    <string name="invert_colors">Invert colors</string>
+    <string name="mirror_image">Mirror image</string>
+    <string name="set_image">Set image</string>
+    <string name="image_result">Image result</string>
+</resources>
