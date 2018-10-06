@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import timber.log.Timber
 
 class ImageSourceFragment : Fragment() {
 
@@ -18,11 +19,13 @@ class ImageSourceFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        Timber.d("onCreateView")
         return inflater.inflate(R.layout.image_source_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        Timber.d("onActivityCreated")
         viewModel = MainActivity.obtainViewModel(activity!!)
         // TODO: Use the ViewModel
     }
