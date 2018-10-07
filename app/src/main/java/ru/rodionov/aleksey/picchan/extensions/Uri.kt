@@ -7,7 +7,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 
 
-fun Uri.toBitmap(contentResolver: ContentResolver?) =
+fun Uri.toBitmap(contentResolver: ContentResolver) =
         if (contentResolver == null)
             null
         else

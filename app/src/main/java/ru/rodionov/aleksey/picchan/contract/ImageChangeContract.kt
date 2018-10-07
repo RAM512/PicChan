@@ -8,14 +8,20 @@ import android.net.Uri
 interface ImageChangeContract {
     interface View {
         fun setImageSource(bitmap: Bitmap)
-        fun showErrorMessagee(message: String)
+        fun showErrorMessage(message: String)
+
+        fun addResult(bitmap: Bitmap)
+        fun removeResult(bitmap: Bitmap)
     }
 
     interface Presenter {
-        fun getImageSource(bitmap: Bitmap)
-        fun getImageSource(imageUri: Uri, contentResolver: ContentResolver)
-        fun useAsSource(image: Bitmap)
-        fun errorWhilePickImage()
+        fun useImageSource(imageUri: Uri, contentResolver: ContentResolver)
+        fun useImageSource(bitmap: Bitmap)
+        fun removeResult()
+
+        fun rotateImage()
+        fun grayScaleImage()
+        fun mirrorImage()
     }
 
     interface Model {

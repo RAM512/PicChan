@@ -8,6 +8,7 @@
     <string name="image_result">Image result</string>
     <string name="select_source">Select source type</string>
     <string name="select_image">Select image</string>
+    <string name="error_couldnt_use_image">Couldn\'t use image as source</string>
     <string-array name="sources_array">
         <item>Local</item>
         <item>Camera</item>
