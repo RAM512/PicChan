@@ -1,4 +1,4 @@
-package aleksey.rodionov.ru.picchan;
+package ru.rodionov.aleksey.picchan;
 
 import android.app.Application;
 

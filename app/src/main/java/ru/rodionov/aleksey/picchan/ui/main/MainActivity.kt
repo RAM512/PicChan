@@ -1,20 +1,11 @@
-package aleksey.rodionov.ru.picchan
+package ru.rodionov.aleksey.picchan.ui.main
 
-import aleksey.rodionov.ru.picchan.ui.main.ImageResultFragment
-import aleksey.rodionov.ru.picchan.ui.main.ImageSourceFragment
-import aleksey.rodionov.ru.picchan.ui.main.MainViewModel
-import android.arch.lifecycle.ViewModelProviders
+import ru.rodionov.aleksey.picchan.R
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
-
-    companion object {
-        fun obtainViewModel(activity: FragmentActivity) =
-                ViewModelProviders.of(activity).get(MainViewModel::class.java)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

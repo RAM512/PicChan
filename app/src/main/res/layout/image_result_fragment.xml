@@ -3,55 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.ImageResultFragment">
+    tools:context=".ui.main.ImageResultFragment"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp">
 
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_margin="16dp">
-
-            <ImageView
-                android:id="@+id/image_source"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:contentDescription="@string/image_source" />
-
-            <Button
-                android:id="@+id/button_set_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/set_image"
-                android:layout_gravity="center"/>
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/button_rotate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rotate" />
-
-        <Button
-            android:id="@+id/button_invert_colors"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/invert_colors" />
-
-        <Button
-            android:id="@+id/button_mirror_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mirror_image" />
-
-    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
