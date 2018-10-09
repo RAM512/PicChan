@@ -2,8 +2,10 @@ package ru.rodionov.aleksey.picchan.ui.main
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -16,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import ru.rodionov.aleksey.picchan.R
+import ru.rodionov.aleksey.picchan.extensions.toBitmap
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -25,8 +28,20 @@ import java.util.*
 
 class ImageSourceFragment : Fragment() {
 
-    private lateinit var mImageSource: ImageView
+    private var mImageSource: ImageView? = null
+    private var mSetImageButton: Button? = null
+    private var mRotateButton: Button? = null
+    private var mGrayscaleButton: Button? = null
+    private var mMirrorButton: Button? = null
+
     private var mPhotoFile: File? = null
+    private var mSourceBitmap: Bitmap? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Timber.d("onCreate")
+        retainInstance = true
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -38,22 +53,45 @@ class ImageSourceFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("onViewCreated")
         mImageSource = view.findViewById(R.id.image_source)
-        val setImageButton = view.findViewById<Button>(R.id.button_set_image)
-        setImageButton.setOnClickListener { showSelectSourceDialog() }
+
+        mSetImageButton = view.findViewById(R.id.button_set_image)
+        mSetImageButton?.setOnClickListener { showSelectSourceDialog() }
+
+        mRotateButton = view.findViewById(R.id.button_rotate_image)
+        mRotateButton?.setOnClickListener { rotateImage() }
+
+        mGrayscaleButton = view.findViewById(R.id.button_grayscale_image)
+        mGrayscaleButton?.setOnClickListener { grayscaleImage() }
+
+        mMirrorButton = view.findViewById(R.id.button_mirror_image)
+        mMirrorButton?.setOnClickListener { mirrorImage() }
+
+        setImageSource(mSourceBitmap)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Timber.d("onDetach")
+        mImageSource = null
+        mSetImageButton = null
+        mRotateButton = null
+        mGrayscaleButton = null
+        mMirrorButton = null
     }
 
     private fun showSelectSourceDialog() {
         val items = resources.getStringArray(R.array.sources_array)
-        AlertDialog.Builder(activity)
-                .setTitle(getString(R.string.select_source))
-                .setItems(items) { _, i ->
-                    when (i) {
-                        0 -> requestLocalImage()
-                        1 -> requestCameraImage()
+        activity?.also {
+            AlertDialog.Builder(activity)
+                    .setTitle(getString(R.string.select_source))
+                    .setItems(items) { _, i ->
+                        when (i) {
+                            0 -> requestLocalImage()
+                            1 -> requestCameraImage()
+                        }
                     }
-                }
-                .show()
-
+                    .show()
+        }
     }
 
     private fun requestLocalImage() {
@@ -76,7 +114,7 @@ class ImageSourceFragment : Fragment() {
                         "IMG_$timeStamp", /* prefix */
                         ".jpg", /* suffix */
                         storageDir /* directory */
-                )
+                ).also { it.deleteOnExit() }
             } catch (e: IOException) {
                 Timber.e("createImageFile IOException")
                 null
@@ -98,7 +136,7 @@ class ImageSourceFragment : Fragment() {
             takePictureIntent.resolveActivity(ctx.packageManager)?.also {
                 // Create the File where the photo should go
                 mPhotoFile = createImageFile()
-                Timber.d("requestCameraImage temp file $mPhotoFile exist ${mPhotoFile?.exists()}")
+                Timber.d("requestCameraImage temp file $mPhotoFile exists ${mPhotoFile?.exists()}")
                 // Continue only if the File was successfully created
                 mPhotoFile?.also { file ->
                     val photoURI = FileProvider.getUriForFile(
@@ -125,6 +163,32 @@ class ImageSourceFragment : Fragment() {
         }
 
         Timber.d("onActivityResult final uri $imageUri")
+        imageUri?.also { uri ->
+            activity?.contentResolver?.also {
+                setImageSource(uri.toBitmap(it))
+            }
+        }
+    }
+
+    private fun setImageSource(bitmap: Bitmap?) {
+        Timber.d("setImageSource")
+        bitmap?.also {
+            mSourceBitmap = it
+            mImageSource?.setImageBitmap(it)
+            mSetImageButton?.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun rotateImage() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun grayscaleImage() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun mirrorImage() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     companion object {
@@ -134,5 +198,4 @@ class ImageSourceFragment : Fragment() {
 
         fun newInstance() = ImageSourceFragment()
     }
-
 }
