@@ -2,6 +2,7 @@ package ru.rodionov.aleksey.picchan.ui.main
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -42,10 +43,9 @@ class ImageSourceFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate")
-        retainInstance = true
         mImagePresenter = getPresenter()
 
-        mImagePresenter.imageSource.observe(this, android.arch.lifecycle.Observer {
+        mImagePresenter.imageSource.observe(this, Observer {
             setImageSource(it)
         })
     }

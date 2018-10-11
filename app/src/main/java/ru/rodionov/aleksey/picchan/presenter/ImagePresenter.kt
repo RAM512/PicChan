@@ -20,7 +20,8 @@ class ImagePresenter(application: Application) :
     val imageSource: MutableLiveData<Bitmap> by lazy { MutableLiveData<Bitmap>() }
 
     private val results: MutableList<Bitmap> = ArrayList()
-    val imageResults: MutableLiveData<List<Bitmap>> by lazy { MutableLiveData<List<Bitmap>>() }
+    val imageResults: MutableLiveData<List<Bitmap>> by lazy { MutableLiveData<List<Bitmap>>()
+            .also { it.value = results } }
 
     var view: ImageChangeContract.View? = null
 
@@ -52,26 +53,26 @@ class ImagePresenter(application: Application) :
 
     override fun rotateImage() {
         Timber.d("rotateImage")
-        imageSource.value?.let {
-            val matrix = Matrix().apply { setRotate(90f) }
-            val rotatedBitmap = it.applyMatrix(matrix)
-            addResult(rotatedBitmap)
-        }
+        modifyImageSource(Matrix().apply { setRotate(90f) })
     }
 
     override fun grayscaleImage() {
         Timber.d("grayscaleImage")
         imageSource.value?.let {
-            addResult( it.toGrayscale() )
+            addResult(it.toGrayscale())
         }
     }
 
     override fun mirrorImage() {
         Timber.d("mirrorImage")
+        modifyImageSource(Matrix().apply { setScale(-1f, 1f) })
+    }
+
+    private fun modifyImageSource(matrix: Matrix) {
+        Timber.d("modifyImageSource")
         imageSource.value?.let {
-            val matrix = Matrix().apply { setScale(-1f, 1f) }
-            val mirroredBitmap = it.applyMatrix(matrix)
-            addResult(mirroredBitmap)
+            val modifiedBitmap = it.applyMatrix(matrix)
+            addResult(modifiedBitmap)
         }
     }
 

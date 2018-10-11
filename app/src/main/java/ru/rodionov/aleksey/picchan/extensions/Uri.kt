@@ -8,13 +8,10 @@ import java.io.IOException
 
 
 fun Uri.toBitmap(contentResolver: ContentResolver) =
-        if (contentResolver == null)
+        try {
+            MediaStore.Images.Media.getBitmap(contentResolver, this)
+        } catch (e: FileNotFoundException) {
             null
-        else
-            try {
-                MediaStore.Images.Media.getBitmap(contentResolver, this)
-            } catch (e: FileNotFoundException) {
-                null
-            } catch (e: IOException) {
-                null
-            }
+        } catch (e: IOException) {
+            null
+        }
