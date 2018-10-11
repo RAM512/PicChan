@@ -17,7 +17,7 @@ interface ImageChangeContract {
     interface Presenter {
         fun useImageSource(imageUri: Uri, contentResolver: ContentResolver)
         fun useImageSource(bitmap: Bitmap)
-        fun removeResult()
+        fun removeResult(result: Bitmap)
 
         fun rotateImage()
         fun grayscaleImage()

@@ -2,7 +2,7 @@ package ru.rodionov.aleksey.picchan.ui.main
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ContentResolver
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -18,7 +18,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import ru.rodionov.aleksey.picchan.R
-import ru.rodionov.aleksey.picchan.extensions.toBitmap
+import ru.rodionov.aleksey.picchan.presenter.ImagePresenter
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -34,6 +34,8 @@ class ImageSourceFragment : Fragment() {
     private var mGrayscaleButton: Button? = null
     private var mMirrorButton: Button? = null
 
+    private lateinit var mImagePresenter: ImagePresenter
+
     private var mPhotoFile: File? = null
     private var mSourceBitmap: Bitmap? = null
 
@@ -41,7 +43,17 @@ class ImageSourceFragment : Fragment() {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate")
         retainInstance = true
+        mImagePresenter = getPresenter()
+
+        mImagePresenter.imageSource.observe(this, android.arch.lifecycle.Observer {
+            setImageSource(it)
+        })
     }
+
+    private fun getPresenter(): ImagePresenter =
+        activity?.run {
+            ViewModelProviders.of(this).get(ImagePresenter::class.java)
+        } ?: throw Exception("Invalid Activity")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -77,6 +89,15 @@ class ImageSourceFragment : Fragment() {
         mRotateButton = null
         mGrayscaleButton = null
         mMirrorButton = null
+    }
+
+    private fun setImageSource(bitmap: Bitmap?) {
+        Timber.d("setImageSource")
+        bitmap?.also {
+            mSourceBitmap = it
+            mImageSource?.setImageBitmap(it)
+            mSetImageButton?.visibility = View.INVISIBLE
+        }
     }
 
     private fun showSelectSourceDialog() {
@@ -165,30 +186,22 @@ class ImageSourceFragment : Fragment() {
         Timber.d("onActivityResult final uri $imageUri")
         imageUri?.also { uri ->
             activity?.contentResolver?.also {
-                setImageSource(uri.toBitmap(it))
+//                setImageSource(uri.toBitmap(it))
+                mImagePresenter.useImageSource(uri, it)
             }
         }
     }
 
-    private fun setImageSource(bitmap: Bitmap?) {
-        Timber.d("setImageSource")
-        bitmap?.also {
-            mSourceBitmap = it
-            mImageSource?.setImageBitmap(it)
-            mSetImageButton?.visibility = View.INVISIBLE
-        }
-    }
-
     private fun rotateImage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mImagePresenter.rotateImage()
     }
 
     private fun grayscaleImage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mImagePresenter.grayscaleImage()
     }
 
     private fun mirrorImage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mImagePresenter.mirrorImage()
     }
 
     companion object {
