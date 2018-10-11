@@ -20,7 +20,7 @@ interface ImageChangeContract {
         fun removeResult()
 
         fun rotateImage()
-        fun grayScaleImage()
+        fun grayscaleImage()
         fun mirrorImage()
     }
 

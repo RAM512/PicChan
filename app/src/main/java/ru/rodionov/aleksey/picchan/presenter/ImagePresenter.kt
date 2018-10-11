@@ -33,7 +33,7 @@ class ImagePresenter(private val view: ImageChangeContract.View, private val con
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun grayScaleImage() {
+    override fun grayscaleImage() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
