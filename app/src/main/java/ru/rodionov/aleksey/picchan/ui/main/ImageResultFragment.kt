@@ -1,5 +1,6 @@
 package ru.rodionov.aleksey.picchan.ui.main
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -15,11 +16,6 @@ import ru.rodionov.aleksey.picchan.R
 import ru.rodionov.aleksey.picchan.presenter.ImagePresenter
 import timber.log.Timber
 
-/**
- * A fragment representing a list of Items.
- * Activities containing this fragment MUST implement the
- * [ImageResultFragment.OnImageSelectedListener] interface.
- */
 class ImageResultFragment : Fragment() {
 
     private var mListener: OnImageSelectedListener? = null
@@ -67,22 +63,37 @@ class ImageResultFragment : Fragment() {
         super.onAttach(context)
         Timber.d("onAttach")
 
-/*        if (context is OnImageSelectedListener) {
-            mListener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnImageSelectedListener")
-        }*/
         mListener = object: OnImageSelectedListener {
             override fun onImageSelected(image: Bitmap) {
                 Timber.d("onImageSelected")
+                showSelectActionDialog(image)
             }
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        Timber.d("onDetach")
-        mListener = null
+    private fun showSelectActionDialog(image: Bitmap) {
+        val items = resources.getStringArray(R.array.result_actions_array)
+        activity?.also {
+            AlertDialog.Builder(activity)
+                    .setTitle(getString(R.string.select_source))
+                    .setItems(items) { _, i ->
+                        when (i) {
+                            0 -> useAsSource(image)
+                            1 -> removeResult(image)
+                        }
+                    }
+                    .show()
+        }
+    }
+
+    private fun useAsSource(image: Bitmap) {
+        Timber.d("useAsSource")
+        mImagePresenter.useImageSource(image)
+    }
+
+    private fun removeResult(image: Bitmap) {
+        Timber.d("removeResult")
+        mImagePresenter.removeResult(image)
     }
 
     interface OnImageSelectedListener {

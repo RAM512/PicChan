@@ -81,16 +81,6 @@ class ImageSourceFragment : Fragment() {
         setImageSource(mSourceBitmap)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        Timber.d("onDetach")
-        mImageSource = null
-        mSetImageButton = null
-        mRotateButton = null
-        mGrayscaleButton = null
-        mMirrorButton = null
-    }
-
     private fun setImageSource(bitmap: Bitmap?) {
         Timber.d("setImageSource")
         bitmap?.also {

@@ -19,9 +19,9 @@ class ImagePresenter(application: Application) :
 
     val imageSource: MutableLiveData<Bitmap> by lazy { MutableLiveData<Bitmap>() }
 
-    private val results: MutableList<Bitmap> = ArrayList()
+    private val mResults: MutableList<Bitmap> = ArrayList()
     val imageResults: MutableLiveData<List<Bitmap>> by lazy { MutableLiveData<List<Bitmap>>()
-            .also { it.value = results } }
+            .also { it.value = mResults } }
 
     var view: ImageChangeContract.View? = null
 
@@ -37,18 +37,24 @@ class ImagePresenter(application: Application) :
     override fun useImageSource(bitmap: Bitmap) {
         Timber.d("useImageSource bitmap $bitmap")
         imageSource.value = bitmap
+        clearResults()
+    }
+
+    private fun clearResults() {
+        mResults.clear()
+        imageResults.value = mResults
     }
 
     override fun removeResult(result: Bitmap) {
         Timber.d("removeResult")
-        results.remove(result)
-        imageResults.value = results
+        mResults.remove(result)
+        imageResults.value = mResults
     }
 
     private fun addResult(result: Bitmap) {
         Timber.d("addResult")
-        results.add(result)
-        imageResults.value = results
+        mResults.add(result)
+        imageResults.value = mResults
     }
 
     override fun rotateImage() {
