@@ -1,6 +1,5 @@
 package ru.rodionov.aleksey.picchan.contract
 
-import ru.rodionov.aleksey.picchan.ImageLoadCallback
 import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.net.Uri

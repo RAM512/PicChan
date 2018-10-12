@@ -1,4 +1,4 @@
-package ru.rodionov.aleksey.picchan
+package ru.rodionov.aleksey.picchan.contract
 
 import android.graphics.Bitmap
 
