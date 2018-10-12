@@ -1,6 +1,8 @@
 package ru.rodionov.aleksey.picchan.ui.main
 
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,9 @@ class ImageResultAdapter(
         private val mListener: OnImageSelectedListener?)
     : RecyclerView.Adapter<ImageResultAdapter.ViewHolder>() {
 
+    private var mColorEvenRow: Int = 0
+    private var mColorOddRow: Int = 0
+
     private val mOnClickListener: View.OnClickListener
 
     init {
@@ -35,7 +40,14 @@ class ImageResultAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Timber.d("onBindViewGolder position $position")
+        if (mColorEvenRow == 0 && mColorOddRow == 0) {
+            val context = holder.mContainer.context
+            mColorEvenRow = ContextCompat.getColor(context, R.color.colorEvenRow)
+            mColorOddRow = ContextCompat.getColor(context, R.color.colorOddRow)
+        }
+
+        holder.mContainer.setBackgroundColor(if (position % 2 == 0) mColorEvenRow else mColorOddRow)
+
         val image = mImages[position]
         holder.mImageResult.setImageBitmap(image)
 
@@ -48,6 +60,7 @@ class ImageResultAdapter(
     override fun getItemCount(): Int = mImages.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
+        val mContainer: View = mView.result_item_container
         val mImageResult: ImageView = mView.image_result
     }
 }
