@@ -29,11 +29,11 @@ import java.util.*
 
 class ImageSourceFragment : Fragment() {
 
-    private var mImageSource: ImageView? = null
-    private var mSetImageButton: Button? = null
-    private var mRotateButton: Button? = null
-    private var mGrayscaleButton: Button? = null
-    private var mMirrorButton: Button? = null
+    private lateinit var mImageSource: ImageView
+    private lateinit var mSetImageButton: Button
+    private lateinit var mRotateButton: Button
+    private lateinit var mGrayscaleButton: Button
+    private lateinit var mMirrorButton: Button
 
     private lateinit var mImagePresenter: ImagePresenter
 
@@ -46,6 +46,7 @@ class ImageSourceFragment : Fragment() {
         mImagePresenter = getPresenter()
 
         mImagePresenter.imageSource.observe(this, Observer {
+            Timber.d("onChanged")
             setImageSource(it)
         })
     }
@@ -67,16 +68,16 @@ class ImageSourceFragment : Fragment() {
         mImageSource = view.findViewById(R.id.image_source)
 
         mSetImageButton = view.findViewById(R.id.button_set_image)
-        mSetImageButton?.setOnClickListener { showSelectSourceDialog() }
+        mSetImageButton.setOnClickListener { showSelectSourceDialog() }
 
         mRotateButton = view.findViewById(R.id.button_rotate_image)
-        mRotateButton?.setOnClickListener { rotateImage() }
+        mRotateButton.setOnClickListener { rotateImage() }
 
         mGrayscaleButton = view.findViewById(R.id.button_grayscale_image)
-        mGrayscaleButton?.setOnClickListener { grayscaleImage() }
+        mGrayscaleButton.setOnClickListener { grayscaleImage() }
 
         mMirrorButton = view.findViewById(R.id.button_mirror_image)
-        mMirrorButton?.setOnClickListener { mirrorImage() }
+        mMirrorButton.setOnClickListener { mirrorImage() }
 
         setImageSource(mSourceBitmap)
     }
@@ -85,8 +86,8 @@ class ImageSourceFragment : Fragment() {
         Timber.d("setImageSource")
         bitmap?.also {
             mSourceBitmap = it
-            mImageSource?.setImageBitmap(it)
-            mSetImageButton?.visibility = View.INVISIBLE
+            mImageSource.setImageBitmap(it)
+            mSetImageButton.visibility = View.INVISIBLE
         }
     }
 
